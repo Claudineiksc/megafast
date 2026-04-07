@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mega Fast VIP v5.1 - Final Edition</title>
+    <style>
+        :root { 
+            --shopee: #ee4d2d; --ml-blue: #3483fa; --ml-yellow: #fff159;
+            --bg: #0f0f0f; --card: #1a1a1a; --text: #f0f0f0; --green: #2ecc71; --whats: #25d366;
+            --tech-blue: #00d4ff;
+        }
+        
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 0; color: var(--text); display: block; }
+        
+        .app-container { width: 95%; max-width: 450px; background: #121212; border-radius: 0 0 25px 25px; padding: 15px; margin: 0 auto; box-shadow: 0 10px 40px rgba(0,0,0,0.8); }
+
+        /* TOAST */
+        #toast { position: fixed; top: -100px; left: 50%; transform: translateX(-50%); background: #fff; color: #000; padding: 14px 25px; border-radius: 50px; font-size: 12px; font-weight: bold; z-index: 1001; transition: 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        #toast.show { top: 30px; }
+
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 10px 5px; }
+
+        .quick-filters { display: flex; gap: 8px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; }
+        .filter-pill { background: #222; border: 1px solid #333; color: #aaa; padding: 10px 18px; border-radius: 50px; font-size: 11px; white-space: nowrap; cursor: pointer; transition: 0.3s; font-weight: 600; }
+        .filter-pill.active { background: #fff; color: #000; border-color: #fff; }
+
+        /* CARDS */
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .product-card { border: 1px solid #252525; border-radius: 20px; margin-bottom: 20px; overflow: hidden; background: var(--card); position: relative; animation: slideUp 0.5s ease-out forwards; opacity: 0; }
+        
+        .fav-btn { position: absolute; top: 45px; left: 15px; z-index: 10; background: rgba(0,0,0,0.6); width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); font-size: 16px; }
+
+        .store-header { padding: 8px 15px; font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; display: flex; justify-content: space-between; align-items: center; }
+        .shopee-header { background: rgba(238, 77, 45, 0.1); color: var(--shopee); border-bottom: 1px solid rgba(238, 77, 45, 0.2); }
+        .ml-header { background: rgba(255, 241, 89, 0.1); color: #ffdb15; border-bottom: 1px solid rgba(255, 241, 89, 0.2); }
+
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+        .featured { animation: bounce 2.5s infinite ease-in-out; border-color: var(--green); }
+
+        .product-body { display: flex; padding: 15px; align-items: center; position: relative; }
+        .product-img { width: 90px; height: 90px; border-radius: 12px; object-fit: cover; margin-right: 15px; background: #fff; }
+
+        .price { font-size: 24px; font-weight: 900; color: #fff; line-height: 1; }
+        .old-price { font-size: 11px; text-decoration: line-through; color: #666; margin-bottom: 4px; display: block; }
+        
+        .badge-row { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 15px 15px; }
+        .mini-badge { font-size: 9px; font-weight: bold; padding: 4px 8px; border-radius: 6px; background: rgba(255,255,255,0.05); color: #bbb; border: 1px solid #333; }
+        .stock-alert { background: rgba(255, 69, 0, 0.15); color: #ff4500; border: 1px solid rgba(255, 69, 0, 0.3); }
+
+        .btn-buy { border: none; width: 100%; padding: 18px; font-weight: 900; cursor: pointer; font-size: 13px; text-transform: uppercase; color: #fff; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+        .btn-shopee { background: var(--shopee); }
+        .btn-ml { background: var(--ml-blue); }
+        
+        .btn-buy::before { content: ""; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); animation: glow 5s infinite; }
+        @keyframes glow { 0% { left: -100%; } 20% { left: 150%; } 100% { left: 150%; } }
+
+        .bottom-nav { 
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); 
+            width: 75%; max-width: 320px; 
+            background: rgba(20, 20, 20, 0.95); backdrop-filter: blur(20px); 
+            border-radius: 40px; display: flex; justify-content: space-around; 
+            padding: 12px 0; border: 1px solid rgba(0, 212, 255, 0.2); 
+            z-index: 1000; box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+        .nav-item { color: #555; text-decoration: none; display: flex; align-items: center; justify-content: center; transition: 0.4s; flex: 1; cursor: pointer; }
+        .nav-item.active { color: var(--tech-blue); filter: drop-shadow(0 0 8px var(--tech-blue)); }
+        .nav-item.whats { color: var(--whats); }
+
+        .footer-spacer { height: 110px; width: 100%; }
+    </style>
+</head>
+<body>
+
+<div id="toast">🔥 32 pessoas viram ofertas agora!</div>
+
+<div class="app-container">
+    <div class="header">
+        <h2 style="margin:0; font-size:18px; letter-spacing:1.5px; color:#fff; font-weight: 900;">MEGA <span style="color:var(--green)">FAST</span></h2>
+        <div style="font-size: 12px; background: #222; padding: 4px 10px; border-radius: 8px; border: 1px solid #333; color: var(--tech-blue);">v5.1</div>
+    </div>
+
+    <div class="quick-filters">
+        <div class="filter-pill active" onclick="filtrar('all', this)">🔥 Melhores do Dia</div>
+        <div class="filter-pill" onclick="filtrar('ml', this)">Mercado Livre</div>
+        <div class="filter-pill" onclick="filtrar('shopee', this)">Shopee VIP</div>
+    </div>
+
+    <div id="vitrine"></div>
+    <div class="footer-spacer"></div>
+</div>
+
+<nav class="bottom-nav">
+    <div class="nav-item active"><span style="font-size: 22px;">🏠</span></div>
+    <div class="nav-item"><span style="font-size: 22px;">❤️</span></div>
+    <div class="nav-item whats" onclick="window.open('https://chat.whatsapp.com/L5u0qgtqHFBCxSbfNEG4oC')">
+        <span style="font-size: 22px;">💬</span>
+    </div>
+</nav>
+
+<script>
+    const produtos = [
+        { 
+            id: 1, loja: "shopee", nome: "Garrafa Térmica 1.2L Premium VIP", 
+            v: 139.90, p: 54.99, img: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-m1p9p7p3p3p3p3", 
+            featured: true, badges: ["🚚 Frete Grátis", "🛡️ Selo VIP", "🔥 Promoção"],
+            stock: "Só 3 unidades!", cta: "Aproveitar Desconto", link: "https://s.shopee.com.br/9ztcoCfqxh"
+        },
+        { 
+            id: 2, loja: "ml", nome: "Fone Lenovo LP40 Pro Original", 
+            v: 149.00, p: 47.50, img: "https://down-br.img.susercontent.com/file/br-11134207-7qukw-lkx3v4y5l88p20", 
+            featured: false, badges: ["⚡ Envio Full", "🚛 Chega Amanhã", "💳 12x Sem Juros"],
+            stock: "Quase acabando!", cta: "Garantir no FULL", link: "https://s.shopee.com.br/8V4p0fnUWy"
+        }
+    ];
+
+    function toggleFav(el) {
+        el.innerHTML = el.innerHTML === '🤍' ? '❤️' : '🤍';
+        el.style.color = el.innerHTML === '❤️' ? '#ff4757' : '#fff';
+    }
+
+    function filtrar(loja, el) {
+        document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+        el.classList.add('active');
+        renderizar(loja);
+    }
+
+    function renderizar(filtro = 'all') {
+        const vitrine = document.getElementById('vitrine');
+        vitrine.innerHTML = "";
+        let lista = filtro === 'all' ? produtos : produtos.filter(p => p.loja === filtro);
+
+        lista.forEach((p, index) => {
+            const isML = p.loja === 'ml';
+            vitrine.innerHTML += `
+                <div class="product-card ${p.featured ? 'featured' : ''}" style="animation-delay: ${index * 0.1}s">
+                    <div class="fav-btn" onclick="toggleFav(this)">🤍</div>
+                    <div class="store-header ${isML ? 'ml-header' : 'shopee-header'}">
+                        <span>${isML ? 'MERCADO LIVRE' : 'SHOPEE BRASIL'}</span>
+                        <span>${isML ? '⚡ FULL' : '✨ VIP'}</span>
+                    </div>
+                    
+                    <div class="product-body">
+                        <img src="${p.img}" class="product-img">
+                        <div style="flex:1">
+                            <h3 style="margin:0 0 8px 0; font-size:14px; color:#fff; font-weight:600;">${p.nome}</h3>
+                            <span class="old-price">R$ ${p.v.toLocaleString()}</span>
+                            <span class="price">R$ ${p.p.toLocaleString()}</span>
+                        </div>
+                    </div>
+
+                    <div class="badge-row">
+                        <span class="mini-badge stock-alert">⚠️ ${p.stock}</span>
+                        ${p.badges.map(b => `<span class="mini-badge">${b}</span>`).join('')}
+                    </div>
+
+                    <button class="btn-buy ${isML ? 'btn-ml' : 'btn-shopee'}" onclick="window.open('${p.link}')">
+                        ${p.cta}
+                    </button>
+                </div>
+            `;
+        });
+    }
+
+    window.onload = () => { 
+        renderizar(); 
+        setTimeout(() => {
+            const t = document.getElementById('toast');
+            if(t) {
+                t.classList.add('show');
+                setTimeout(() => t.classList.remove('show'), 5000);
+            }
+        }, 2000);
+    };
+</script>
+</body>
+</html>
