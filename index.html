@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mega Fast VIP</title>
     <style>
-        :root { --shopee: #ee4d2d; --bg: #0f0f0f; --card: #1a1a1a; --text: #f0f0f0; --green: #2ecc71; --blue: #00d4ff; --gold: #f1c40f; }
+        :root { --shopee: #ee4d2d; --bg: #0f0f0f; --card: #1a1a1a; --text: #f0f0f0; --green: #2ecc71; --blue: #00d4ff; --gold: #f1c40f; --whatsapp: #25d366; }
         body { font-family: sans-serif; background: var(--bg); margin: 0; color: var(--text); padding-bottom: 100px; }
         .app-container { width: 95%; max-width: 450px; margin: 0 auto; padding: 15px; }
         
@@ -29,30 +29,25 @@
         .tag-free { background: #00b894; color: #fff; font-size: 9px; padding: 2px 5px; border-radius: 3px; font-weight: bold; }
         .tag-card { background: #0984e3; color: #fff; font-size: 9px; padding: 2px 5px; border-radius: 3px; font-weight: bold; }
 
-        /* --- BOTÃO COM FLASH SUAVE --- */
+        .rating { color: var(--gold); font-size: 10px; margin-bottom: 4px; }
+        .timer-alert { color: #ff7675; font-size: 10px; font-weight: bold; margin-top: 8px; display: block; }
+        
+        /* Botão Enviar WhatsApp com ícone real */
+        .share-btn { position: absolute; top: 10px; right: 10px; background: var(--whatsapp); color: white; border-radius: 50%; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.3); z-index: 10; }
+        .share-btn img { width: 20px; height: 20px; }
+
+        /* BOTÃO COM FLASH SUAVE (4s) */
         .btn-buy { 
             border: none; width: 100%; padding: 15px; font-weight: bold; cursor: pointer; 
             color: #fff; background: var(--shopee); text-transform: uppercase; 
             position: relative; overflow: hidden;
         }
-
         .btn-buy::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -150%;
-            width: 50%;
-            height: 100%;
+            content: ''; position: absolute; top: 0; left: -150%; width: 50%; height: 100%;
             background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.4), transparent);
-            transform: skewX(-25deg);
-            animation: moveFlash 4s infinite; /* 4 segundos para ficar bem calmo */
+            transform: skewX(-25deg); animation: moveFlash 4s infinite;
         }
-
-        @keyframes moveFlash {
-            0% { left: -150%; }
-            30% { left: 150%; } /* O brilho passa rápido */
-            100% { left: 150%; } /* E fica parado fora da tela pelo resto do tempo */
-        }
+        @keyframes moveFlash { 0% { left: -150%; } 30% { left: 150%; } 100% { left: 150%; } }
 
         .bottom-nav { position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); width: 60%; background: #1a1a1a; border-radius: 40px; display: flex; justify-content: space-around; padding: 10px; border: 1px solid var(--blue); z-index: 100; }
     </style>
@@ -83,15 +78,33 @@
 </nav>
 
 <script>
+    // Configuração dos produtos com segundos totais para o cronômetro
     const produtos = [
-        { nome: "Relógio Smartwatch D30 Bluetooth", v: 119.90, p: 39.90, img: "https://down-br.img.susercontent.com/file/sg-11134201-22120-f5u6u7p8p8p8p8", link: "https://s.shopee.com.br/9UxMe3BA8I", frete: true, parcelas: "3x s/ juros", fav: true },
-        { nome: "Kit Potes de Cozinha Organizador", v: 89.90, p: 45.50, img: "https://down-br.img.susercontent.com/file/br-11134207-7qukw-lkx3v4y5l88p20", link: "https://s.shopee.com.br/40cQ5y9MZJ", frete: true, parcelas: "2x", fav: false },
-        { nome: "Echo Dot Alexa 5ª Geração", v: 449.00, p: 329.00, img: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-lkx3v4y5l88p20", link: "https://s.shopee.com.br/5fke53xscI", frete: true, parcelas: "10x s/ juros", fav: true },
-        { nome: "Conjunto Jogo de Tapete Banheiro", v: 65.00, p: 29.90, img: "https://down-br.img.susercontent.com/file/sg-11134201-22100-8p8p8p8p8p8p8p", link: "https://s.shopee.com.br/3fzZhRUxF8", frete: true, parcelas: "2x", fav: false },
-        { nome: "Copo Térmico Premium com Tampa", v: 95.00, p: 42.00, img: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-m1p9p7p3p3p3p3", link: "https://s.shopee.com.br/30jsuEx4fp", frete: true, parcelas: "3x", fav: true }
+        { id: 1, nome: "Relógio Smartwatch D30 Bluetooth", v: 119.90, p: 39.90, img: "https://down-br.img.susercontent.com/file/sg-11134201-22120-f5u6u7p8p8p8p8", link: "https://s.shopee.com.br/9UxMe3BA8I", frete: true, parcelas: "3x s/ juros", fav: true, tempoSegundos: 5400 },
+        { id: 2, nome: "Kit Potes de Cozinha Organizador", v: 89.90, p: 45.50, img: "https://down-br.img.susercontent.com/file/br-11134207-7qukw-lkx3v4y5l88p20", link: "https://s.shopee.com.br/40cQ5y9MZJ", frete: true, parcelas: "2x", fav: false, tempoSegundos: 9600 },
+        { id: 3, nome: "Echo Dot Alexa 5ª Geração", v: 449.00, p: 329.00, img: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-lkx3v4y5l88p20", link: "https://s.shopee.com.br/5fke53xscI", frete: true, parcelas: "10x s/ juros", fav: true, tempoSegundos: 3200 },
+        { id: 4, nome: "Conjunto Jogo de Tapete Banheiro", v: 65.00, p: 29.90, img: "https://down-br.img.susercontent.com/file/sg-11134201-22100-8p8p8p8p8p8p8p", link: "https://s.shopee.com.br/3fzZhRUxF8", frete: true, parcelas: "2x", fav: false, tempoSegundos: 12000 },
+        { id: 5, nome: "Copo Térmico Premium com Tampa", v: 95.00, p: 42.00, img: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-m1p9p7p3p3p3p3", link: "https://s.shopee.com.br/30jsuEx4fp", frete: true, parcelas: "3x", fav: true, tempoSegundos: 7500 }
     ];
 
     let currentMode = 'all';
+
+    function formatTime(s) {
+        const h = Math.floor(s / 3600);
+        const m = Math.floor((s % 3600) / 60);
+        const sec = s % 60;
+        return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
+    }
+
+    function updateTimers() {
+        produtos.forEach(p => {
+            if (p.tempoSegundos > 0) p.tempoSegundos--;
+            const el = document.getElementById(`timer-${p.id}`);
+            if (el) el.innerText = `⏳ Oferta encerra em: ${formatTime(p.tempoSegundos)}`;
+        });
+    }
+
+    setInterval(updateTimers, 1000);
 
     function render(list) {
         const vitrine = document.getElementById('vitrine');
@@ -104,18 +117,28 @@
             vitrine.innerHTML += `
                 <div class="product-card">
                     ${badge}
+                    <div class="share-btn" onclick="shareProduct('${p.nome}', '${p.link}')">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+                    </div>
                     <div class="product-body">
                         <img src="${p.img}" class="product-img">
                         <div style="flex:1">
+                            <div class="rating">⭐⭐⭐⭐⭐</div>
                             <h3 style="font-size:14px; margin:0 0 5px 0;">${p.nome}</h3>
                             <span class="old-price">R$ ${p.v.toFixed(2)}</span>
                             <span class="price">R$ ${p.p.toFixed(2)}</span>
                             <div class="tags">${freteTag} ${cardTag}</div>
+                            <span class="timer-alert" id="timer-${p.id}">⏳ Oferta encerra em: ${formatTime(p.tempoSegundos)}</span>
                         </div>
                     </div>
                     <button class="btn-buy" onclick="window.open('${p.link}')">EU QUERO!</button>
                 </div>`;
         });
+    }
+
+    function shareProduct(nome, link) {
+        const text = `🔥 *OFERTA RELÂMPAGO NO MEGA FAST!* %0A%0A*${nome}*%0A%0A👉 *Confira aqui:* ${link}`;
+        window.open(`https://api.whatsapp.com/send?text=${text}`);
     }
 
     function filterTab(mode) {
