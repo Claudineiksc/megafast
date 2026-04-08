@@ -5,16 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mega Fast VIP</title>
     <style>
-        :root { --shopee: #ee4d2d; --bg: #0f0f0f; --card: #1a1a1a; --text: #f0f0f0; --green: #2ecc71; --blue: #00d4ff; }
+        :root { --shopee: #ee4d2d; --bg: #0f0f0f; --card: #1a1a1a; --text: #f0f0f0; --green: #2ecc71; --blue: #00d4ff; --gold: #f1c40f; }
         body { font-family: sans-serif; background: var(--bg); margin: 0; color: var(--text); padding-bottom: 100px; }
         .app-container { width: 95%; max-width: 450px; margin: 0 auto; padding: 15px; }
+        
         .search-box { background: #252525; border-radius: 12px; padding: 12px; margin-bottom: 20px; display: flex; align-items: center; border: 1px solid #333; }
         .search-box input { background: transparent; border: none; color: #fff; width: 100%; outline: none; margin-left: 10px; }
-        .product-card { border: 1px solid #252525; border-radius: 15px; margin-bottom: 20px; background: var(--card); overflow: hidden; }
+
+        .product-card { border: 1px solid #252525; border-radius: 15px; margin-bottom: 20px; background: var(--card); overflow: hidden; position: relative; }
+        .badge-fav { position: absolute; top: 10px; left: 10px; background: var(--gold); color: #000; font-size: 10px; font-weight: bold; padding: 3px 8px; border-radius: 5px; z-index: 10; }
+        
         .store-header { padding: 8px 15px; font-size: 11px; font-weight: bold; background: rgba(238, 77, 45, 0.1); color: var(--shopee); display: flex; justify-content: space-between; }
         .product-body { display: flex; padding: 15px; align-items: center; }
-        .product-img { width: 85px; height: 85px; border-radius: 10px; object-fit: cover; margin-right: 15px; background: #fff; }
-        .price-tag { color: var(--green); font-size: 18px; font-weight: 900; }
+        .product-img { width: 90px; height: 90px; border-radius: 10px; object-fit: cover; margin-right: 15px; background: #fff; }
+        
+        .old-price { font-size: 12px; text-decoration: line-through; color: #666; display: block; }
+        .price { font-size: 22px; font-weight: 900; color: var(--green); display: block; }
+        
         .btn-buy { border: none; width: 100%; padding: 15px; font-weight: bold; cursor: pointer; color: #fff; background: var(--shopee); text-transform: uppercase; }
         .bottom-nav { position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); width: 60%; background: #1a1a1a; border-radius: 40px; display: flex; justify-content: space-around; padding: 10px; border: 1px solid var(--blue); z-index: 100; }
     </style>
@@ -23,7 +30,7 @@
 
 <div class="app-container">
     <div style="text-align:center; padding: 15px 0;">
-        <h2 style="margin:0; letter-spacing: 1px;">MEGA <span style="color:var(--green)">FAST</span> VIP</h2>
+        <h2 style="margin:0;">MEGA <span style="color:var(--green)">FAST</span> VIP</h2>
     </div>
 
     <div class="search-box">
@@ -41,28 +48,31 @@
 
 <script>
     const produtos = [
-        { nome: "Relógio Smartwatch D30 Bluetooth", img: "https://down-br.img.susercontent.com/file/sg-11134201-22120-f5u6u7p8p8p8p8", link: "https://s.shopee.com.br/9UxMe3BA8I" },
-        { nome: "Kit Potes de Cozinha Organizador", img: "https://down-br.img.susercontent.com/file/br-11134207-7qukw-lkx3v4y5l88p20", link: "https://s.shopee.com.br/40cQ5y9MZJ" },
-        { nome: "Echo Dot Alexa 5ª Geração", img: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-lkx3v4y5l88p20", link: "https://s.shopee.com.br/5fke53xscI" },
-        { nome: "Conjunto Jogo de Tapete Banheiro", img: "https://down-br.img.susercontent.com/file/sg-11134201-22100-8p8p8p8p8p8p8p", link: "https://s.shopee.com.br/3fzZhRUxF8" },
-        { nome: "Copo Térmico Premium com Tampa", img: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-m1p9p7p3p3p3p3", link: "https://s.shopee.com.br/30jsuEx4fp" }
+        { nome: "Relógio Smartwatch D30 Bluetooth", v: 119.90, p: 39.90, img: "https://down-br.img.susercontent.com/file/sg-11134201-22120-f5u6u7p8p8p8p8", link: "https://s.shopee.com.br/9UxMe3BA8I", fav: true },
+        { nome: "Kit Potes de Cozinha Organizador", v: 89.90, p: 45.50, img: "https://down-br.img.susercontent.com/file/br-11134207-7qukw-lkx3v4y5l88p20", link: "https://s.shopee.com.br/40cQ5y9MZJ", fav: false },
+        { nome: "Echo Dot Alexa 5ª Geração", v: 449.00, p: 329.00, img: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-lkx3v4y5l88p20", link: "https://s.shopee.com.br/5fke53xscI", fav: true },
+        { nome: "Conjunto Jogo de Tapete Banheiro", v: 65.00, p: 29.90, img: "https://down-br.img.susercontent.com/file/sg-11134201-22100-8p8p8p8p8p8p8p", link: "https://s.shopee.com.br/3fzZhRUxF8", fav: false },
+        { nome: "Copo Térmico Premium com Tampa", v: 95.00, p: 42.00, img: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-m1p9p7p3p3p3p3", link: "https://s.shopee.com.br/30jsuEx4fp", fav: true }
     ];
 
     function render(list) {
         const vitrine = document.getElementById('vitrine');
         vitrine.innerHTML = '';
         list.forEach(p => {
+            const badge = p.fav ? `<div class="badge-fav">⭐ FAVORITO</div>` : '';
             vitrine.innerHTML += `
                 <div class="product-card">
-                    <div class="store-header"><span>OFERTA DO DIA</span><span>SHOPEE</span></div>
+                    ${badge}
+                    <div class="store-header"><span>OFERTA LIMITADA</span><span>SHOPEE</span></div>
                     <div class="product-body">
                         <img src="${p.img}" class="product-img">
                         <div style="flex:1">
                             <h3 style="font-size:14px; margin:0 0 5px 0;">${p.nome}</h3>
-                            <span class="price-tag">Preço Especial VIP</span>
+                            <span class="old-price">R$ ${p.v.toFixed(2)}</span>
+                            <span class="price">R$ ${p.p.toFixed(2)}</span>
                         </div>
                     </div>
-                    <button class="btn-buy" onclick="window.open('${p.link}')">APROVEITAR NO APP</button>
+                    <button class="btn-buy" onclick="window.open('${p.link}')">APROVEITAR AGORA</button>
                 </div>`;
         });
     }
