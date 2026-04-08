@@ -11,7 +11,8 @@
         
         /* Abas de Navegação */
         .tabs { display: flex; gap: 10px; margin-bottom: 15px; }
-        .tab { background: #252525; padding: 8px 15px; border-radius: 20px; font-size: 13px; cursor: pointer; border: 1px solid #333; }
+        .tab { background: #252525; padding: 8px 15px; border-radius: 20px; font-size: 13px; cursor: pointer; border: 1px solid #333; transition: 0.3s; }
+        .tab:hover { background: #333; }
         .tab.active { background: var(--blue); border-color: var(--blue); color: #000; font-weight: bold; }
 
         .search-box { background: #252525; border-radius: 12px; padding: 12px; margin-bottom: 15px; display: flex; align-items: center; border: 1px solid #333; }
@@ -31,7 +32,39 @@
         .tag-free { background: #00b894; color: #fff; font-size: 9px; padding: 2px 5px; border-radius: 3px; font-weight: bold; }
         .tag-card { background: #0984e3; color: #fff; font-size: 9px; padding: 2px 5px; border-radius: 3px; font-weight: bold; }
 
-        .btn-buy { border: none; width: 100%; padding: 15px; font-weight: bold; cursor: pointer; color: #fff; background: var(--shopee); text-transform: uppercase; }
+        /* Botão com Efeito Flash */
+        .btn-buy { 
+            border: none; width: 100%; padding: 15px; font-weight: bold; cursor: pointer; 
+            color: #fff; background: var(--shopee); text-transform: uppercase; 
+            position: relative; overflow: hidden; /* Necessário para o flash */
+        }
+        .btn-buy::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(45deg);
+            transition: 0.5s;
+            opacity: 0;
+        }
+        .btn-buy:hover::after {
+            opacity: 1;
+            top: -10%;
+            left: -10%;
+        }
+        /* Alternativa: Flash automático */
+        @keyframes flash {
+            0% { left: -100%; opacity: 0; }
+            50% { left: 100%; opacity: 1; }
+            100% { left: 100%; opacity: 0; }
+        }
+        .btn-buy.auto-flash::after {
+            animation: flash 1.5s infinite;
+        }
+
         .bottom-nav { position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); width: 60%; background: #1a1a1a; border-radius: 40px; display: flex; justify-content: space-around; padding: 10px; border: 1px solid var(--blue); z-index: 100; }
     </style>
 </head>
@@ -61,13 +94,16 @@
 </nav>
 
 <script>
+    /* --- CONFIGURAÇÃO FÁCIL DE FAVORITOS --- */
+    /* Coloque true para SIM (favorito) e false para NÃO */
     const produtos = [
-        { nome: "Relógio Smartwatch D30 Bluetooth", v: 119.90, p: 39.90, img: "https://down-br.img.susercontent.com/file/sg-11134201-22120-f5u6u7p8p8p8p8", link: "https://s.shopee.com.br/9UxMe3BA8I", fav: true, frete: true, parcelas: "3x s/ juros" },
-        { nome: "Kit Potes de Cozinha Organizador", v: 89.90, p: 45.50, img: "https://down-br.img.susercontent.com/file/br-11134207-7qukw-lkx3v4y5l88p20", link: "https://s.shopee.com.br/40cQ5y9MZJ", fav: false, frete: true, parcelas: "2x" },
-        { nome: "Echo Dot Alexa 5ª Geração", v: 449.00, p: 329.00, img: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-lkx3v4y5l88p20", link: "https://s.shopee.com.br/5fke53xscI", fav: true, frete: true, parcelas: "10x s/ juros" },
-        { nome: "Conjunto Jogo de Tapete Banheiro", v: 65.00, p: 29.90, img: "https://down-br.img.susercontent.com/file/sg-11134201-22100-8p8p8p8p8p8p8p", link: "https://s.shopee.com.br/3fzZhRUxF8", fav: false, frete: true, parcelas: "2x" },
-        { nome: "Copo Térmico Premium com Tampa", v: 95.00, p: 42.00, img: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-m1p9p7p3p3p3p3", link: "https://s.shopee.com.br/30jsuEx4fp", fav: true, frete: true, parcelas: "3x" }
+        { nome: "Relógio Smartwatch D30 Bluetooth", v: 119.90, p: 39.90, img: "https://down-br.img.susercontent.com/file/sg-11134201-22120-f5u6u7p8p8p8p8", link: "https://s.shopee.com.br/9UxMe3BA8I", frete: true, parcelas: "3x s/ juros", fav: true },
+        { nome: "Kit Potes de Cozinha Organizador", v: 89.90, p: 45.50, img: "https://down-br.img.susercontent.com/file/br-11134207-7qukw-lkx3v4y5l88p20", link: "https://s.shopee.com.br/40cQ5y9MZJ", frete: true, parcelas: "2x", fav: false },
+        { nome: "Echo Dot Alexa 5ª Geração", v: 449.00, p: 329.00, img: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-lkx3v4y5l88p20", link: "https://s.shopee.com.br/5fke53xscI", frete: true, parcelas: "10x s/ juros", fav: true },
+        { nome: "Conjunto Jogo de Tapete Banheiro", v: 65.00, p: 29.90, img: "https://down-br.img.susercontent.com/file/sg-11134201-22100-8p8p8p8p8p8p8p", link: "https://s.shopee.com.br/3fzZhRUxF8", frete: true, parcelas: "2x", fav: false },
+        { nome: "Copo Térmico Premium com Tampa", v: 95.00, p: 42.00, img: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-m1p9p7p3p3p3p3", link: "https://s.shopee.com.br/30jsuEx4fp", frete: true, parcelas: "3x", fav: true }
     ];
+    /* -------------------------------------- */
 
     let currentMode = 'all';
 
@@ -79,6 +115,7 @@
             const freteTag = p.frete ? `<span class="tag-free">FRETE GRÁTIS</span>` : '';
             const cardTag = p.parcelas ? `<span class="tag-card">💳 ${p.parcelas}</span>` : '';
             
+            // Adiciona a classe auto-flash para o efeito automático
             vitrine.innerHTML += `
                 <div class="product-card">
                     ${badge}
@@ -91,7 +128,7 @@
                             <div class="tags">${freteTag} ${cardTag}</div>
                         </div>
                     </div>
-                    <button class="btn-buy" onclick="window.open('${p.link}')">EU QUERO!</button>
+                    <button class="btn-buy auto-flash" onclick="window.open('${p.link}')">EU QUERO!</button>
                 </div>`;
         });
     }
@@ -109,6 +146,13 @@
         if (currentMode === 'fav') {
             filtered = filtered.filter(p => p.fav);
         }
+        render(filtered);
+    }
+
+    render(produtos);
+</script>
+</body>
+</html>
         render(filtered);
     }
 
