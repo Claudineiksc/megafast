@@ -33,12 +33,10 @@
             font-size: 10px; font-weight: 800; margin-bottom: 20px; text-transform: uppercase;
         }
 
-        /* STORIES / CATEGORIAS (VOLTOU!) */
-        .categories { display: flex; justify-content: space-around; margin-bottom: 20px; gap: 5px; }
-        .cat-item { display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: 0.2s; }
+        .categories { display: flex; justify-content: space-around; margin-bottom: 20px; gap: 5px; overflow-x: auto; padding: 5px 0; }
+        .cat-item { display: flex; flex-direction: column; align-items: center; cursor: pointer; min-width: 70px; }
         .cat-circle { width: 55px; height: 55px; background: #1a1a1a; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; border: 1px solid #333; margin-bottom: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
         .cat-item span { font-size: 10px; font-weight: 600; color: #888; }
-        .cat-item:active { transform: scale(0.9); }
 
         .search-box { background: #1a1a1a; border-radius: 12px; padding: 12px 15px; margin-bottom: 15px; display: flex; align-items: center; border: 1px solid #333; }
         .search-box input { background: transparent; border: none; color: #fff; width: 100%; outline: none; margin-left: 8px; font-size: 13px; }
@@ -60,6 +58,12 @@
         
         .old-price { font-size: 9px; text-decoration: line-through; color: #666; display: block; }
         .price { font-size: 19px; font-weight: 900; color: var(--green); display: block; }
+        
+        .benefits { display: flex; flex-wrap: wrap; gap: 4px; margin: 5px 0; }
+        .tag-benefit { font-size: 7px; font-weight: 900; padding: 2px 5px; border-radius: 4px; text-transform: uppercase; }
+        .tag-frete { background: rgba(46, 204, 113, 0.2); color: var(--green); border: 1px solid var(--green); }
+        .tag-card { background: rgba(0, 212, 255, 0.2); color: var(--blue); border: 1px solid var(--blue); }
+
         .timer-alert { color: #ff7675; font-size: 9px; font-weight: 700; margin-top: 5px; display: block; }
 
         .btn-buy { border: none; width: 100%; padding: 14px; font-weight: 900; color: #fff; background: var(--shopee); text-transform: uppercase; font-size: 11px; cursor: pointer; position: relative; overflow: hidden; }
@@ -83,9 +87,10 @@
 
     <div class="categories">
         <div class="cat-item" onclick="resetSearch()"><div class="cat-circle">⚡</div><span>Tudo</span></div>
-        <div class="cat-item" onclick="searchByCat('cozinha')"><div class="cat-circle">🍳</div><span>Casa</span></div>
+        <div class="cat-item" onclick="searchByCat('cozinha')"><div class="cat-circle">🍳</div><span>Cozinha</span></div>
         <div class="cat-item" onclick="searchByCat('relógio')"><div class="cat-circle">⌚</div><span>Relógios</span></div>
-        <div class="cat-item" onclick="searchByCat('alexa')"><div class="cat-circle">🎧</div><span>Tech</span></div>
+        <div class="cat-item" onclick="searchByCat('segurança')"><div class="cat-circle">📹</div><span>Segurança</span></div>
+        <div class="cat-item" onclick="searchByCat('decoração')"><div class="cat-circle">🏠</div><span>Casa</span></div>
     </div>
 
     <div class="search-box">
@@ -108,18 +113,24 @@
 
 <script>
     const produtos = [
-        { id: 1, nome: "Relógio Smartwatch D30 Bluetooth", v: 119.90, p: 39.90, img: "https://down-br.img.susercontent.com/file/sg-11134201-22120-f5u6u7p8p8p8p8", link: "https://s.shopee.com.br/9UxMe3BA8I", fav: true, vip: true, tempo: 5400 },
-        { id: 2, nome: "Kit Potes de Cozinha Organizador", v: 89.90, p: 45.50, img: "https://down-br.img.susercontent.com/file/br-11134207-7qukw-lkx3v4y5l88p20", link: "https://s.shopee.com.br/40cQ5y9MZJ", fav: false, vip: false, tempo: 9600 },
-        { id: 3, nome: "Echo Dot Alexa 5ª Geração", v: 449.00, p: 329.00, img: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-lkx3v4y5l88p20", link: "https://s.shopee.com.br/5fke53xscI", fav: true, vip: true, tempo: 3200 },
-        { id: 4, nome: "Conjunto Jogo de Tapete Banheiro", v: 65.00, p: 29.90, img: "https://down-br.img.susercontent.com/file/sg-11134201-22100-8p8p8p8p8p8p8p", link: "https://s.shopee.com.br/3fzZhRUxF8", fav: false, vip: false, tempo: 12000 }
+        // ITENS ANTERIORES (SHOPEE)
+        { id: 1, nome: "Relógio Smartwatch D30 Bluetooth", v: 119.90, p: 39.90, img: "https://down-br.img.susercontent.com/file/sg-11134201-22120-f5u6u7p8p8p8p8", link: "https://s.shopee.com.br/9UxMe3BA8I", fav: true, vip: true, tempo: 5400, cat: 'relógio' },
+        { id: 2, nome: "Kit Potes de Cozinha Organizador", v: 89.90, p: 45.50, img: "https://down-br.img.susercontent.com/file/br-11134207-7qukw-lkx3v4y5l88p20", link: "https://s.shopee.com.br/40cQ5y9MZJ", fav: false, vip: false, tempo: 9600, cat: 'cozinha' },
+        { id: 3, nome: "Echo Dot Alexa 5ª Geração", v: 449.00, p: 329.00, img: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-lkx3v4y5l88p20", link: "https://s.shopee.com.br/5fke53xscI", fav: true, vip: true, tempo: 3200, cat: 'tech' },
+        { id: 4, nome: "Conjunto Jogo de Tapete Banheiro", v: 65.00, p: 29.90, img: "https://down-br.img.susercontent.com/file/sg-11134201-22100-8p8p8p8p8p8p8p", link: "https://s.shopee.com.br/3fzZhRUxF8", fav: false, vip: false, tempo: 12000, cat: 'decoração' },
+        { id: 5, nome: "Copo Térmico com Tampa 473ml", v: 59.90, p: 24.90, img: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-lkx3v4y5l88p20", link: "https://s.shopee.com.br/40cQ5y9MZJ", fav: true, vip: false, tempo: 7200, cat: 'cozinha' },
+
+        // NOVOS ITENS (MERCADO LIVRE)
+        { id: 6, nome: "Câmera de Segurança Wifi Externa", v: 289.90, p: 154.90, img: "https://http2.mlstatic.com/D_NQ_NP_960555-MLB74044673678_012024-O.webp", link: "https://meli.la/1QxXXdY", fav: true, vip: true, tempo: 3600, cat: 'segurança' },
+        { id: 7, nome: "Luminária Astronauta Projetor Galáxia", v: 149.00, p: 87.50, img: "https://http2.mlstatic.com/D_NQ_NP_660232-MLU73099834279_112023-O.webp", link: "https://meli.la/19imz77", fav: true, vip: true, tempo: 5200, cat: 'decoração' },
+        { id: 8, nome: "Espelho Decorativo de Parede", v: 199.00, p: 129.00, img: "https://http2.mlstatic.com/D_NQ_NP_725946-MLU72648596645_112023-O.webp", link: "https://meli.la/2d3WWwK", fav: false, vip: false, tempo: 9600, cat: 'decoração' },
+        { id: 9, nome: "Cortina Blackout para Sala/Quarto", v: 150.00, p: 89.90, img: "https://http2.mlstatic.com/D_NQ_NP_705355-MLB72648596645_112023-O.webp", link: "https://meli.la/2mdx4ge", fav: false, vip: false, tempo: 12000, cat: 'decoração' }
     ];
 
     let currentMode = 'all';
 
     function formatTime(s) {
-        const h = Math.floor(s / 3600);
-        const m = Math.floor((s % 3600) / 60);
-        const sec = s % 60;
+        const h = Math.floor(s / 3600); const m = Math.floor((s % 3600) / 60); const sec = s % 60;
         return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
     }
 
@@ -137,6 +148,10 @@
                         <div>
                             <span class="old-price">R$ ${p.v.toFixed(2)}</span>
                             <span class="price">R$ ${p.p.toFixed(2)}</span>
+                        </div>
+                        <div class="benefits">
+                            <span class="tag-benefit tag-frete">Frete Grátis</span>
+                            <span class="tag-benefit tag-card">12x no Cartão</span>
                         </div>
                         <span class="timer-alert" id="timer-${p.id}">⏳ ${formatTime(p.tempo)}</span>
                     </div>
@@ -167,7 +182,7 @@
 
     function search() {
         const text = document.getElementById('searchInput').value.toLowerCase();
-        let filtered = produtos.filter(p => p.nome.toLowerCase().includes(text));
+        let filtered = produtos.filter(p => p.nome.toLowerCase().includes(text) || p.cat.includes(text));
         if (currentMode === 'fav') { filtered = filtered.filter(p => p.fav); }
         render(filtered);
     }
