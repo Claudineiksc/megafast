@@ -8,6 +8,11 @@
         :root { --shopee: #ee4d2d; --bg: #0f0f0f; --card: #1a1a1a; --text: #f0f0f0; --green: #2ecc71; --blue: #00d4ff; }
         body { font-family: sans-serif; background: var(--bg); margin: 0; color: var(--text); padding-bottom: 100px; }
         .app-container { width: 95%; max-width: 450px; margin: 0 auto; padding: 15px; }
+        
+        /* Barra de Pesquisa */
+        .search-box { background: #252525; border-radius: 12px; padding: 12px; margin-bottom: 20px; display: flex; align-items: center; border: 1px solid #333; }
+        .search-box input { background: transparent; border: none; color: #fff; width: 100%; outline: none; margin-left: 10px; }
+
         .product-card { border: 1px solid #252525; border-radius: 15px; margin-bottom: 20px; background: var(--card); overflow: hidden; }
         .store-header { padding: 8px 15px; font-size: 11px; font-weight: bold; background: rgba(238, 77, 45, 0.1); color: var(--shopee); display: flex; justify-content: space-between; }
         .product-body { display: flex; padding: 15px; align-items: center; }
@@ -15,14 +20,22 @@
         .price { font-size: 20px; font-weight: 900; color: #fff; display: block; }
         .old-price { font-size: 11px; text-decoration: line-through; color: #666; }
         .btn-buy { border: none; width: 100%; padding: 15px; font-weight: bold; cursor: pointer; color: #fff; background: var(--shopee); text-transform: uppercase; }
-        .bottom-nav { position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); width: 60%; background: #1a1a1a; border-radius: 40px; display: flex; justify-content: space-around; padding: 10px; border: 1px solid var(--blue); }
+        
+        .bottom-nav { position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); width: 60%; background: #1a1a1a; border-radius: 40px; display: flex; justify-content: space-around; padding: 10px; border: 1px solid var(--blue); z-index: 100; }
     </style>
 </head>
 <body>
+
 <div class="app-container">
     <div style="text-align:center; padding: 15px 0;">
         <h2 style="margin:0;">MEGA <span style="color:var(--green)">FAST</span> VIP</h2>
     </div>
+
+    <div class="search-box">
+        <span>🔍</span>
+        <input type="text" id="searchInput" placeholder="Pesquisar nos Achadinhos..." onkeyup="search()">
+    </div>
+
     <div id="vitrine"></div>
 </div>
 
@@ -40,30 +53,33 @@
         { nome: "Kit Pincéis Maquiagem Profissional", v: 79.00, p: 24.50, img: "https://down-br.img.susercontent.com/file/br-11134207-7qukw-llx3v4y5l88p20", link: "https://s.shopee.com.br/9ztcoCfqxh" }
     ];
 
-    const vitrine = document.getElementById('vitrine');
-    produtos.forEach(p => {
-        vitrine.innerHTML += `
-            <div class="product-card">
-                <div class="store-header"><span>OFERTA VIP</span><span>SHOPEE</span></div>
-                <div class="product-body">
-                    <img src="${p.img}" class="product-img">
-                    <div style="flex:1">
-                        <h3 style="font-size:14px; margin:0 0 5px 0;">${p.nome}</h3>
-                        <span class="old-price">R$ ${p.v.toFixed(2)}</span>
-                        <span class="price">R$ ${p.p.toFixed(2)}</span>
+    function render(list) {
+        const vitrine = document.getElementById('vitrine');
+        vitrine.innerHTML = '';
+        list.forEach(p => {
+            vitrine.innerHTML += `
+                <div class="product-card">
+                    <div class="store-header"><span>OFERTA VIP</span><span>SHOPEE</span></div>
+                    <div class="product-body">
+                        <img src="${p.img}" class="product-img">
+                        <div style="flex:1">
+                            <h3 style="font-size:14px; margin:0 0 5px 0;">${p.nome}</h3>
+                            <span class="old-price">R$ ${p.v.toFixed(2)}</span>
+                            <span class="price">R$ ${p.p.toFixed(2)}</span>
+                        </div>
                     </div>
-                </div>
-                <button class="btn-buy" onclick="window.open('${p.link}')">VER PRODUTO</button>
-            </div>`;
-    });
-</script>
-</body>
-</html>
-                t.classList.add('show');
-                setTimeout(() => t.classList.remove('show'), 5000);
-            }
-        }, 2000);
-    };
+                    <button class="btn-buy" onclick="window.open('${p.link}')">VER PRODUTO</button>
+                </div>`;
+        });
+    }
+
+    function search() {
+        const text = document.getElementById('searchInput').value.toLowerCase();
+        const filtered = produtos.filter(p => p.nome.toLowerCase().includes(text));
+        render(filtered);
+    }
+
+    render(produtos);
 </script>
 </body>
 </html>
