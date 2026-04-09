@@ -6,38 +6,44 @@
     <title>Mega Fast VIP</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800;900&display=swap" rel="stylesheet">
     <style>
-        :root { --shopee: #ee4d2d; --bg: #0f0f0f; --card: #1a1a1a; --text: #f0f0f0; --green: #2ecc71; --blue: #00d4ff; --gold: #f1c40f; }
+        :root { --shopee: #ee4d2d; --meli: #fff159; --bg: #0f0f0f; --card: #1a1a1a; --text: #f0f0f0; --green: #00ff88; --blue: #00d4ff; --red: #ff7675; --verify: #1d9bf0; }
         * { font-family: 'Poppins', sans-serif; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); margin: 0; color: var(--text); padding-bottom: 110px; }
+        body { background: var(--bg); margin: 0; color: var(--text); padding-bottom: 110px; overflow-x: hidden; }
 
-        #toast {
-            position: fixed; top: -100px; left: 50%; transform: translateX(-50%);
-            background: #fff; color: #000; padding: 12px 25px; border-radius: 30px;
-            font-size: 11px; font-weight: 800; z-index: 2000; box-shadow: 0 10px 30px #000;
-            transition: 0.8s; width: 280px; text-align: center;
+        /* Push Real Banner */
+        #push-banner {
+            position: fixed; top: -300px; left: 50%; transform: translateX(-50%);
+            width: 92%; max-width: 400px; background: #fff; color: #000;
+            border-radius: 20px; padding: 20px; z-index: 5000; display: flex; flex-direction: column; gap: 12px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.9); transition: 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 2px solid var(--blue);
         }
+        #push-banner.show { top: 20px; }
+        .btn-p { border: none; padding: 10px 18px; border-radius: 10px; font-weight: 800; font-size: 11px; cursor: pointer; }
+        .btn-allow { background: var(--blue); color: #fff; }
 
         .app-container { width: 98%; max-width: 500px; margin: 0 auto; padding: 10px; }
 
-        .header-premium { text-align: center; padding: 20px 0 10px 0; }
+        /* Header Premium */
+        .header-premium { text-align: center; padding: 25px 0 15px 0; }
         .header-premium h2 { 
-            margin: 0; font-size: 28px; font-weight: 900; 
-            background: linear-gradient(135deg, #fff 30%, var(--green) 100%);
+            margin: 0; font-size: 30px; font-weight: 900; 
+            background: linear-gradient(135deg, #fff 20%, var(--green) 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            text-transform: uppercase;
+            text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 8px;
         }
+        .verified-badge { color: var(--verify); font-size: 22px; }
 
-        .promo-banner {
-            background: linear-gradient(90deg, #6c5ce7, #a29bfe);
-            color: white; border-radius: 12px; padding: 10px; text-align: center;
-            font-size: 10px; font-weight: 800; margin-bottom: 20px; text-transform: uppercase;
-        }
+        .online-count { font-size: 10px; color: #aaa; font-weight: 700; text-transform: uppercase; margin-top: 5px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+        .dot-green { width: 8px; height: 8px; background: var(--green); border-radius: 50%; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
 
-        .categories { display: flex; justify-content: space-around; margin-bottom: 20px; gap: 5px; overflow-x: auto; padding: 5px 0; }
-        .cat-item { display: flex; flex-direction: column; align-items: center; cursor: pointer; min-width: 70px; }
-        .cat-circle { width: 55px; height: 55px; background: #1a1a1a; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; border: 1px solid #333; margin-bottom: 6px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-        .cat-item span { font-size: 10px; font-weight: 600; color: #888; }
-
+        /* Filtros e Busca */
+        .categories { display: flex; overflow-x: auto; gap: 15px; margin-bottom: 20px; padding: 5px 0; scrollbar-width: none; }
+        .categories::-webkit-scrollbar { display: none; }
+        .cat-item { display: flex; flex-direction: column; align-items: center; cursor: pointer; min-width: 75px; }
+        .cat-circle { width: 60px; height: 60px; background: #1a1a1a; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid #333; margin-bottom: 6px; font-size: 24px; }
+        
         .search-box { background: #1a1a1a; border-radius: 12px; padding: 12px 15px; margin-bottom: 15px; display: flex; align-items: center; border: 1px solid #333; }
         .search-box input { background: transparent; border: none; color: #fff; width: 100%; outline: none; margin-left: 8px; font-size: 13px; }
 
@@ -45,134 +51,109 @@
         .tab { background: #222; padding: 12px; border-radius: 12px; font-size: 11px; cursor: pointer; border: 1px solid #333; flex: 1; text-align: center; font-weight: 800; color: #fff; }
         .tab.active { background: var(--blue); border-color: var(--blue); color: #000; }
 
-        #vitrine { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        /* Vitrine Blindada */
+        #vitrine { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .product-card { background: var(--card); border-radius: 18px; overflow: hidden; position: relative; border: 1px solid #252525; display: flex; flex-direction: column; }
-        .vip-neon { border: 1px solid var(--green) !important; animation: neonPulse 2s infinite; }
-        @keyframes neonPulse { 0%, 100% { box-shadow: 0 0 5px rgba(46, 204, 113, 0.2); } 50% { box-shadow: 0 0 12px rgba(46, 204, 113, 0.4); } }
+        
+        /* Tags */
+        .origin-tag { position: absolute; top: 10px; right: 10px; padding: 5px 10px; border-radius: 8px; font-size: 8px; font-weight: 900; z-index: 20; text-transform: uppercase; backdrop-filter: blur(5px); }
+        .tag-shopee { background: rgba(238, 77, 45, 0.9); color: #fff; }
+        .tag-meli { background: rgba(255, 241, 89, 0.9); color: #2d3277; }
+        
+        .discount-tag { position: absolute; top: 10px; left: 10px; background: var(--green); color: #000; font-size: 10px; font-weight: 900; padding: 4px 8px; border-radius: 6px; z-index: 10; }
+        
+        .fav-btn { position: absolute; bottom: 120px; right: 10px; background: rgba(0,0,0,0.6); border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; z-index: 30; border: none; color: #fff; font-size: 16px; }
+        .fav-btn.active { color: var(--red); background: #fff; }
 
         .product-img { width: 100%; aspect-ratio: 1/1; object-fit: cover; background: #fff; }
-        .badge-fav { position: absolute; top: 8px; left: 8px; background: var(--gold); color: #000; font-size: 8px; font-weight: 900; padding: 3px 6px; border-radius: 5px; z-index: 5; }
-
-        .product-info { padding: 10px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
-        .product-name { font-size: 11px; font-weight: 600; height: 30px; overflow: hidden; margin-bottom: 5px; color: #eee; }
         
-        .old-price { font-size: 9px; text-decoration: line-through; color: #666; display: block; }
-        .price { font-size: 19px; font-weight: 900; color: var(--green); display: block; }
+        .product-info { padding: 12px; flex-grow: 1; }
+        .product-name { font-size: 11px; font-weight: 600; height: 32px; overflow: hidden; color: #eee; line-height: 1.2; margin-bottom: 8px; }
         
-        .benefits { display: flex; flex-wrap: wrap; gap: 4px; margin: 5px 0; }
-        .tag-benefit { font-size: 7px; font-weight: 900; padding: 2px 5px; border-radius: 4px; text-transform: uppercase; }
-        .tag-frete { background: rgba(46, 204, 113, 0.2); color: var(--green); border: 1px solid var(--green); }
-        .tag-card { background: rgba(0, 212, 255, 0.2); color: var(--blue); border: 1px solid var(--blue); }
+        /* Preços Cortados */
+        .price-box { display: flex; flex-direction: column; gap: 2px; }
+        .old-price { font-size: 10px; color: #777; text-decoration: line-through; font-weight: 600; }
+        .price { font-size: 20px; font-weight: 900; color: var(--green); }
+        
+        /* Etiquetas de Benefício */
+        .benefit-badges { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
+        .b-badge { font-size: 8px; font-weight: 800; padding: 2px 5px; border-radius: 4px; text-transform: uppercase; border: 1px solid; }
 
-        .timer-alert { color: #ff7675; font-size: 9px; font-weight: 700; margin-top: 5px; display: block; }
+        .btn-buy { border: none; width: 100%; padding: 15px; font-weight: 900; text-transform: uppercase; font-size: 10px; cursor: pointer; margin-top: 5px; }
+        .btn-shopee { background: var(--shopee); color: #fff; }
+        .btn-meli { background: var(--meli); color: #2d3277; }
 
-        .btn-buy { border: none; width: 100%; padding: 14px; font-weight: 900; color: #fff; background: var(--shopee); text-transform: uppercase; font-size: 11px; cursor: pointer; position: relative; overflow: hidden; }
-        .btn-buy::after { content: ''; position: absolute; top: 0; left: -150%; width: 50%; height: 100%; background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent); transform: skewX(-25deg); animation: moveFlash 4s infinite; }
-        @keyframes moveFlash { 0% { left: -150%; } 30% { left: 150%; } 100% { left: 150%; } }
-
-        .bottom-nav { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 160px; background: rgba(20, 20, 20, 0.95); backdrop-filter: blur(10px); border-radius: 40px; display: flex; justify-content: space-around; padding: 15px; border: 1px solid var(--blue); z-index: 100; }
+        .bottom-nav { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 160px; background: rgba(20, 20, 20, 0.95); border-radius: 40px; display: flex; justify-content: space-around; padding: 15px; border: 1px solid var(--blue); z-index: 100; }
     </style>
 </head>
 <body>
 
-<div id="toast">✅ Alguém de Caculé comprou!</div>
+<div id="push-banner">
+    <div class="push-h">🔔 ALERTAS CLAUDINEI</div>
+    <div style="font-size: 12px; font-weight: 600; color: #444;">Deseja ser notificado no celular sobre os achadinhos novos?</div>
+    <div class="push-btns">
+        <button class="btn-p" onclick="closePush()">NÃO</button>
+        <button class="btn-p btn-allow" onclick="requestRealPush()">ATIVAR AGORA</button>
+    </div>
+</div>
 
 <div class="app-container">
     <div class="header-premium">
-        <h2>Mega Fast VIP ☑️</h2>
-        <span style="font-size: 11px; color: #888;">🟢 <span id="userCount">157</span> online</span>
+        <h2>MEGA FAST <span class="verified-badge">✔</span></h2>
+        <div class="online-count"><span class="dot-green"></span> <span id="user-online">154</span> ONLINE</div>
     </div>
-
-    <div class="promo-banner">🚀 OFERTAS RELÂMPAGO ATUALIZADAS!</div>
 
     <div class="categories">
         <div class="cat-item" onclick="resetSearch()"><div class="cat-circle">⚡</div><span>Tudo</span></div>
         <div class="cat-item" onclick="searchByCat('cozinha')"><div class="cat-circle">🍳</div><span>Cozinha</span></div>
-        <div class="cat-item" onclick="searchByCat('relógio')"><div class="cat-circle">⌚</div><span>Relógios</span></div>
-        <div class="cat-item" onclick="searchByCat('segurança')"><div class="cat-circle">📹</div><span>Segurança</span></div>
-        <div class="cat-item" onclick="searchByCat('decoração')"><div class="cat-circle">🏠</div><span>Casa</span></div>
+        <div class="cat-item" onclick="searchByCat('tech')"><div class="cat-circle">🖱️</div><span>Tech</span></div>
+        <div class="cat-item" onclick="searchByCat('casa')"><div class="cat-circle">🏠</div><span>Casa</span></div>
     </div>
 
     <div class="search-box">
         <span>🔍</span>
-        <input type="text" id="searchInput" placeholder="O que você busca hoje?" onkeyup="search()">
+        <input type="text" id="searchInput" placeholder="Buscar produto..." onkeyup="search()">
     </div>
 
     <div class="tabs">
         <div class="tab active" id="tabAll" onclick="filterTab('all')">OFERTAS</div>
-        <div class="tab" id="tabFav" onclick="filterTab('fav')">FAVORITOS</div>
+        <div class="tab" id="tabFav" onclick="filterTab('fav')">FAVORITOS ❤️</div>
     </div>
 
     <div id="vitrine"></div>
 </div>
 
 <nav class="bottom-nav">
-    <span style="font-size:24px; cursor:pointer" onclick="window.scrollTo({top:0, behavior:'smooth'})">🏠</span>
+    <span style="font-size:24px; cursor:pointer" onclick="location.reload()">🏠</span>
     <span style="font-size:24px; cursor:pointer" onclick="window.open('https://chat.whatsapp.com/L5u0qgtqHFBCxSbfNEG4oC')">💬</span>
 </nav>
 
 <script>
     const produtos = [
-        // SHOPEE (Ajustado)
-        { id: 1, nome: "Relógio Smartwatch D30 Bluetooth", v: 119.90, p: 39.90, img: "https://down-br.img.susercontent.com/file/sg-11134201-22120-f5u6u7p8p8p8p8", link: "https://s.shopee.com.br/9UxMe3BA8I", fav: true, vip: true, tempo: 5400, cat: 'relógio' },
-        { id: 2, nome: "Kit Potes de Cozinha Organizador", v: 89.90, p: 45.50, img: "https://down-br.img.susercontent.com/file/br-11134207-7qukw-lkx3v4y5l88p20", link: "https://s.shopee.com.br/40cQ5y9MZJ", fav: false, vip: false, tempo: 9600, cat: 'cozinha' },
-        { id: 3, nome: "Echo Dot Alexa 5ª Geração", v: 449.00, p: 54.00, img: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-lkx3v4y5l88p20", link: "https://s.shopee.com.br/5fke53xscI", fav: true, vip: true, tempo: 3200, cat: 'tech' },
-        { id: 4, nome: "Conjunto Jogo de Tapete Banheiro", v: 65.00, p: 29.90, img: "https://down-br.img.susercontent.com/file/sg-11134201-22100-8p8p8p8p8p8p8p", link: "https://s.shopee.com.br/3fzZhRUxF8", fav: false, vip: false, tempo: 12000, cat: 'decoração' },
-        { id: 5, nome: "Copo Térmico Premium com Tampa", v: 95.00, p: 42.00, img: "https://down-br.img.susercontent.com/file/br-11134207-7r98o-lkx3v4y5l88p20", link: "https://s.shopee.com.br/40cQ5y9MZJ", fav: true, vip: false, tempo: 7200, cat: 'cozinha' },
-
-        // MERCADO LIVRE
-        { id: 6, nome: "Câmera de Segurança Wifi Externa", v: 289.90, p: 154.90, img: "https://http2.mlstatic.com/D_NQ_NP_960555-MLB74044673678_012024-O.webp", link: "https://meli.la/1QxXXdY", fav: true, vip: true, tempo: 3600, cat: 'segurança' },
-        { id: 7, nome: "Luminária Astronauta Projetor Galáxia", v: 149.00, p: 87.50, img: "https://http2.mlstatic.com/D_NQ_NP_660232-MLU73099834279_112023-O.webp", link: "https://meli.la/19imz77", fav: true, vip: true, tempo: 5200, cat: 'decoração' },
-        { id: 8, nome: "Espelho Decorativo de Parede", v: 199.00, p: 129.00, img: "https://http2.mlstatic.com/D_NQ_NP_725946-MLU72648596645_112023-O.webp", link: "https://meli.la/2d3WWwK", fav: false, vip: false, tempo: 9600, cat: 'decoração' },
-        { id: 9, nome: "Cortina Blackout para Sala/Quarto", v: 150.00, p: 89.90, img: "https://http2.mlstatic.com/D_NQ_NP_705355-MLB72648596645_112023-O.webp", link: "https://meli.la/2mdx4ge", fav: false, vip: false, tempo: 12000, cat: 'decoração' }
+        { id: 1, loja: "shopee", nome: "Conjunto de Copos de Vidro Premium", p_antigo: 59.90, p: 34.00, img: "https://i.ibb.co/zTFmNXMx/99unxsg-11134201-7rdxi-mc2ffbg7mei476.jpg", link: "https://s.shopee.com.br/qfR8T2TWH", fav: false, cat: 'cozinha' },
+        { id: 2, loja: "shopee", nome: "Smartwatch Ultra Series Especial", p_antigo: 149.00, p: 77.90, img: "https://i.ibb.co/20GjcyDM/no-mark-React-Native-snapshot-image-1.png", link: "https://s.shopee.com.br/30jvo7xISl", fav: false, cat: 'tech' },
+        { id: 3, loja: "shopee", nome: "Fone de Ouvido Bluetooth Pro High", p_antigo: 65.00, p: 26.77, img: "https://i.ibb.co/hRgVkK0y/no-mark-React-Native-snapshot-image-2.png", link: "https://s.shopee.com.br/2LUF1GuwdD", fav: false, cat: 'tech' },
+        { id: 4, loja: "mercado livre", nome: "Câmera de Segurança Inteligente Full HD", p_antigo: 129.00, p: 52.40, img: "https://i.ibb.co/BHgK1t2r/Screenshot-2026-04-09-19-34-42-998-com-mercadolibre.png", link: "https://meli.la/1FjycEH", fav: false, cat: 'casa' }
     ];
 
+    function requestRealPush() {
+        if (!('Notification' in window)) return;
+        Notification.requestPermission().then(p => { if(p==='granted') { new Notification("Mega Fast VIP", {body: "Avisaremos você!"}); closePush(); } });
+    }
+
+    let idleTimer;
+    function startIdleTimer() {
+        clearTimeout(idleTimer);
+        document.title = "Mega Fast VIP";
+        idleTimer = setTimeout(() => { document.title = "⚠️ NOVOS ACHADOS POSTADOS!"; }, 50 * 60 * 1000); 
+    }
+    ['click', 'touchstart', 'scroll', 'mousemove'].forEach(e => document.addEventListener(e, startIdleTimer));
+
+    function closePush() { document.getElementById('push-banner').classList.remove('show'); }
+    setTimeout(() => { if(Notification.permission !== 'granted') document.getElementById('push-banner').classList.add('show'); }, 6000);
+
     let currentMode = 'all';
-
-    function formatTime(s) {
-        const h = Math.floor(s / 3600); const m = Math.floor((s % 3600) / 60); const sec = s % 60;
-        return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
-    }
-
-    function render(list) {
-        const vitrine = document.getElementById('vitrine');
-        vitrine.innerHTML = '';
-        list.forEach(p => {
-            const vipClass = p.vip ? 'vip-neon' : '';
-            vitrine.innerHTML += `
-                <div class="product-card ${vipClass}">
-                    ${p.vip ? '<div class="badge-fav">OFERTA VIP</div>' : ''}
-                    <img src="${p.img}" class="product-img">
-                    <div class="product-info">
-                        <h3 class="product-name">${p.nome}</h3>
-                        <div>
-                            <span class="old-price">R$ ${p.v.toFixed(2)}</span>
-                            <span class="price">R$ ${p.p.toFixed(2)}</span>
-                        </div>
-                        <div class="benefits">
-                            <span class="tag-benefit tag-frete">Frete Grátis</span>
-                            <span class="tag-benefit tag-card">12x no Cartão</span>
-                        </div>
-                        <span class="timer-alert" id="timer-${p.id}">⏳ ${formatTime(p.tempo)}</span>
-                    </div>
-                    <button class="btn-buy" onclick="window.open('${p.link}')">EU QUERO!</button>
-                </div>`;
-        });
-    }
-
-    setInterval(() => {
-        produtos.forEach(p => { if (p.tempo > 0) p.tempo--; const el = document.getElementById(`timer-${p.id}`); if (el) el.innerText = `⏳ ${formatTime(p.tempo)}`; });
-    }, 1000);
-
-    function showToast() {
-        const toast = document.getElementById('toast');
-        const cidades = ['Caculé', 'Caetité', 'Salvador', 'Guanambi', 'Brumado'];
-        toast.innerText = `🛒 Alguém de ${cidades[Math.floor(Math.random()*cidades.length)]} comprou!`;
-        toast.style.top = '25px';
-        setTimeout(() => { toast.style.top = '-100px'; }, 4000);
-    }
-    setInterval(showToast, 40000);
-
+    function toggleFav(id) { const p = produtos.find(item => item.id === id); p.fav = !p.fav; search(); }
     function filterTab(mode) {
         currentMode = mode;
         document.getElementById('tabAll').classList.toggle('active', mode === 'all');
@@ -183,15 +164,49 @@
     function search() {
         const text = document.getElementById('searchInput').value.toLowerCase();
         let filtered = produtos.filter(p => p.nome.toLowerCase().includes(text) || p.cat.includes(text));
-        if (currentMode === 'fav') { filtered = filtered.filter(p => p.fav); }
+        if (currentMode === 'fav') filtered = filtered.filter(p => p.fav);
         render(filtered);
     }
 
     function searchByCat(cat) { document.getElementById('searchInput').value = cat; search(); }
     function resetSearch() { document.getElementById('searchInput').value = ''; search(); }
 
-    setInterval(() => { document.getElementById('userCount').innerText = 150 + Math.floor(Math.random() * 20); }, 4000);
+    function render(list) {
+        const vitrine = document.getElementById('vitrine');
+        vitrine.innerHTML = list.map(p => {
+            const desconto = Math.round(((p.p_antigo - p.p) / p.p_antigo) * 100);
+            const isShopee = p.loja === "shopee";
+            return `
+                <div class="product-card">
+                    <div class="discount-tag">-${desconto}% OFF</div>
+                    <div class="origin-tag ${isShopee ? 'tag-shopee' : 'tag-meli'}">${isShopee ? 'Shopee' : 'Mercado Livre'}</div>
+                    <button class="fav-btn ${p.fav ? 'active' : ''}" onclick="toggleFav(${p.id})">❤</button>
+                    <img src="${p.img}" class="product-img">
+                    <div class="product-info">
+                        <h3 class="product-name">${p.nome}</h3>
+                        <div class="price-box">
+                            <span class="old-price">De R$ ${p.p_antigo.toFixed(2)}</span>
+                            <span class="price">R$ ${p.p.toFixed(2)}</span>
+                        </div>
+                        <div class="benefit-badges">
+                            <span class="b-badge" style="color:var(--green)">Frete Grátis</span>
+                            <span class="b-badge" style="color:var(--blue)">Oficial</span>
+                        </div>
+                    </div>
+                    <button class="btn-buy ${isShopee ? 'btn-shopee' : 'btn-meli'}" onclick="window.open('${p.link}')">
+                        ${isShopee ? 'VER NA SHOPEE' : 'VER NO MERCADO LIVRE'}
+                    </button>
+                </div>`;
+        }).join('');
+    }
+
+    setInterval(() => {
+        const count = Math.floor(Math.random() * (175 - 135 + 1)) + 135;
+        document.getElementById('user-online').innerText = count;
+    }, 4000);
+
     render(produtos);
+    startIdleTimer();
 </script>
 </body>
 </html>
