@@ -11,7 +11,7 @@
         * { font-family: 'Poppins', sans-serif; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg); margin: 0; color: var(--text); padding-bottom: 110px; overflow-x: hidden; }
 
-        /* Banner Push Real */
+        /* Banner Push iOS */
         #push-banner {
             position: fixed; top: -300px; left: 50%; transform: translateX(-50%);
             width: 92%; max-width: 380px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(15px);
@@ -20,7 +20,7 @@
         }
         #push-banner.show { top: 20px; }
 
-        /* Notificação de Venda - 25 Segundos */
+        /* Prova Social 25s */
         #sale-notification {
             position: fixed; bottom: 100px; left: 20px; background: rgba(255, 255, 255, 0.95);
             color: #000; padding: 12px 18px; border-radius: 18px; font-size: 11px; font-weight: 700;
@@ -48,11 +48,10 @@
         .tab { background: #161616; padding: 12px; border-radius: 14px; font-size: 11px; cursor: pointer; border: 1px solid #222; flex: 1; text-align: center; font-weight: 800; color: #888; }
         .tab.active { background: #fff; color: #000; border-color: #fff; }
 
-        /* Vitrine Blindada v2.3 */
+        /* Vitrine Blindada */
         #vitrine { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .product-card { background: var(--card); border-radius: 22px; overflow: hidden; position: relative; border: 1px solid #222; display: flex; flex-direction: column; }
         
-        /* Etiquetas Restauradas */
         .origin-tag { position: absolute; top: 10px; right: 10px; padding: 5px 10px; border-radius: 10px; font-size: 8px; font-weight: 900; z-index: 20; text-transform: uppercase; }
         .tag-shopee { background: var(--shopee); color: #fff; }
         .tag-meli { background: var(--meli); color: #2d3277; }
@@ -77,12 +76,13 @@
         .btn-shopee { background: var(--shopee); color: #fff; }
         .btn-meli { background: #2d3277; color: #fff; border-top: 2px solid var(--meli); }
 
-        /* Barra Inferior Premium */
+        /* BARRA TRANSPARENTE COM NOVOS ÍCONES */
         .bottom-nav { 
             position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); 
             width: 180px; background: rgba(255, 255, 255, 0.08); 
             backdrop-filter: blur(25px); border-radius: 35px; display: flex; justify-content: space-around; 
             padding: 12px; border: 1px solid rgba(255,255,255,0.15); z-index: 1000; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
         }
         .nav-icon { color: #fff; font-size: 20px; opacity: 0.6; cursor: pointer; }
         .nav-icon.active { opacity: 1; color: var(--blue); }
@@ -137,15 +137,16 @@
 
 <script>
     const produtos = [
+        { id: 0, loja: "mercado livre", nome: "Torneira Cozinha Gourmet Monocomando Extensível", p_antigo: 249.90, p: 76.65, img: "https://i.ibb.co/8ns0YjWy/Screenshot-2026-04-15-19-09-40-939-com-mercadolibre-edit.jpg", link: "https://meli.la/1RqYExX", fav: false, cat: 'casa' },
         { id: 1, loja: "shopee", nome: "Conjunto de Copos de Vidro Premium", p_antigo: 59.90, p: 34.00, img: "https://i.ibb.co/zTFmNXMx/99unxsg-11134201-7rdxi-mc2ffbg7mei476.jpg", link: "https://s.shopee.com.br/qfR8T2TWH", fav: false, cat: 'cozinha' },
         { id: 2, loja: "shopee", nome: "Smartwatch Ultra Series Especial", p_antigo: 149.00, p: 77.90, img: "https://i.ibb.co/20GjcyDM/no-mark-React-Native-snapshot-image-1.png", link: "https://s.shopee.com.br/30jvo7xISl", fav: false, cat: 'tech' },
-        { id: 3, loja: "shopee", nome: "Fone de Ouvido Bluetooth Pro High", p_antigo: 65.00, p: 26.77, img: "https://i.ibb.co/hRgVkK0y/no-mark-React-Native-snapshot-image-2.png", link: "https://s.shopee.com.br/2LUF1GuwdD", fav: false, cat: 'tech' },
         { id: 4, loja: "mercado livre", nome: "Câmera de Segurança Inteligente Full HD", p_antigo: 129.00, p: 52.40, img: "https://i.ibb.co/BHgK1t2r/Screenshot-2026-04-09-19-34-42-998-com-mercadolibre.png", link: "https://meli.la/1FjycEH", fav: false, cat: 'casa' }
     ];
+        { id: 3, loja: "shopee", nome: "Fone de Ouvido Bluetooth Pro High", p_antigo: 65.00, p: 26.77, img: "https://i.ibb.co/hRgVkK0y/no-mark-React-Native-snapshot-image-2.png", link: "https://s.shopee.com.br/2LUF1GuwdD", fav: false, cat: 'tech' }
+    ];
 
-    // Prova Social - Tempo ajustado para 25s
-    const cidades = ["São Paulo", "Rio de Janeiro", "Curitiba", "Salvador", "Fortaleza", "Manaus", "Recife", "Brasília"];
-    const nomes = ["Ricardo", "Ana", "Marcos", "Julia", "Felipe", "Sandra", "Bruno", "Carla"];
+    const cidades = ["São Paulo", "Rio de Janeiro", "Curitiba", "Salvador", "Fortaleza", "Manaus", "Recife", "Brasília", "Caculé"];
+    const nomes = ["Ricardo", "Ana", "Marcos", "Julia", "Felipe", "Sandra", "Bruno", "Carla", "Claudinei"];
 
     function showSale() {
         const saleText = document.getElementById('sale-text');
@@ -156,12 +157,11 @@
     }
     setInterval(showSale, 25000); 
 
-    // Timer Inatividade 50 min
     let idleTimer;
     function startIdleTimer() {
         clearTimeout(idleTimer);
         document.title = "Mega Fast VIP";
-        idleTimer = setTimeout(() => { document.title = "⚠️ VOLTA AQUI! Novas Ofertas!"; }, 50 * 60 * 1000); 
+        idleTimer = setTimeout(() => { document.title = "⚠️ BUG DETECTADO! Volta logo!"; }, 50 * 60 * 1000); 
     }
     ['click', 'touchstart', 'scroll'].forEach(e => document.addEventListener(e, startIdleTimer));
 
