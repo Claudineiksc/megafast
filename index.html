@@ -25,7 +25,7 @@
             position: fixed; bottom: 100px; left: 20px; background: rgba(255, 255, 255, 0.95);
             color: #000; padding: 12px 18px; border-radius: 18px; font-size: 11px; font-weight: 700;
             display: flex; align-items: center; gap: 10px; z-index: 900;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5); transform: translateX(-180%); transition: 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); transform: translateX(-180%); transition: 0.6s;
         }
         #sale-notification.show { transform: translateX(0); }
         .sale-dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; animation: pulse 1s infinite; }
@@ -76,7 +76,6 @@
         .btn-shopee { background: var(--shopee); color: #fff; }
         .btn-meli { background: #2d3277; color: #fff; border-top: 2px solid var(--meli); }
 
-        /* BARRA TRANSPARENTE COM NOVOS ÍCONES */
         .bottom-nav { 
             position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); 
             width: 180px; background: rgba(255, 255, 255, 0.08); 
@@ -138,10 +137,9 @@
 <script>
     const produtos = [
         { id: 0, loja: "mercado livre", nome: "Torneira Cozinha Gourmet Monocomando Extensível", p_antigo: 249.90, p: 76.65, img: "https://i.ibb.co/8ns0YjWy/Screenshot-2026-04-15-19-09-40-939-com-mercadolibre-edit.jpg", link: "https://meli.la/1RqYExX", fav: false, cat: 'casa' },
+        { id: 4, loja: "mercado livre", nome: "Câmera de Segurança Inteligente Full HD", p_antigo: 129.00, p: 52.40, img: "https://i.ibb.co/BHgK1t2r/Screenshot-2026-04-09-19-34-42-998-com-mercadolibre.png", link: "https://meli.la/1FjycEH", fav: false, cat: 'casa' },
         { id: 1, loja: "shopee", nome: "Conjunto de Copos de Vidro Premium", p_antigo: 59.90, p: 34.00, img: "https://i.ibb.co/zTFmNXMx/99unxsg-11134201-7rdxi-mc2ffbg7mei476.jpg", link: "https://s.shopee.com.br/qfR8T2TWH", fav: false, cat: 'cozinha' },
         { id: 2, loja: "shopee", nome: "Smartwatch Ultra Series Especial", p_antigo: 149.00, p: 77.90, img: "https://i.ibb.co/20GjcyDM/no-mark-React-Native-snapshot-image-1.png", link: "https://s.shopee.com.br/30jvo7xISl", fav: false, cat: 'tech' },
-        { id: 4, loja: "mercado livre", nome: "Câmera de Segurança Inteligente Full HD", p_antigo: 129.00, p: 52.40, img: "https://i.ibb.co/BHgK1t2r/Screenshot-2026-04-09-19-34-42-998-com-mercadolibre.png", link: "https://meli.la/1FjycEH", fav: false, cat: 'casa' }
-    ];
         { id: 3, loja: "shopee", nome: "Fone de Ouvido Bluetooth Pro High", p_antigo: 65.00, p: 26.77, img: "https://i.ibb.co/hRgVkK0y/no-mark-React-Native-snapshot-image-2.png", link: "https://s.shopee.com.br/2LUF1GuwdD", fav: false, cat: 'tech' }
     ];
 
